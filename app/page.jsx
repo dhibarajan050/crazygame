@@ -1,14 +1,11 @@
 
 import {games} from "@/app/mock";
 import GameCard from "@/app/components/GameCard";
-
-import Navbar from "@/app/components/Navbar";
+import  Layout  from "@/app/pageLayout/layout";
 
 export default function Home() {
   return (
-    <div className="pt-20 container box-border bg-gray-200 mx-auto px-10 py-10">
-      <Navbar />
-
+    <Layout>
       <h1 className="text-3xl font-bold mb-8 text-center 
         animate-pulse hover:animate-none transition-transform duration-500 
         hover:scale-105">
@@ -28,7 +25,6 @@ export default function Home() {
           <GameCard key={index} game={game} />
         ))}
       </div>
-
-    </div>
+    </Layout>
   );
 }

@@ -1,8 +1,9 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { games } from "@/app/mock";
+import Layout from "@/app/pageLayout/layout";
 
 export default function GamePage() {
   const params = useParams();
@@ -14,8 +15,6 @@ export default function GamePage() {
   const iframeRef = useRef(null);
   const containerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
- 
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -36,8 +35,6 @@ export default function GamePage() {
       document.removeEventListener("keydown", handleEscape);
     };
   }, []);
-
-
 
   if (!game) {
     return (
@@ -60,57 +57,73 @@ export default function GamePage() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    // <div className="min-h-screen">
+    <Layout>
+      {/* 3 Column Layout */}
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
 
-      {/* Game Container */}
-      <div
-        ref={containerRef}
-        className="relative w-full h-screen flex flex-col"
-      >
-
-        {/* Top Overlay */}
-        <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 bg-gradient-to-b from-black/70 to-transparent z-10">
-
-          <h1 className="text-xl md:text-2xl font-bold">
-            {game.title}
-          </h1>
-
-          <div className="flex gap-3">
-
-            <button
-              onClick={toggleFullscreen}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm"
-            >
-              {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
-            </button>
-
-            <button
-              onClick={() => router.push("/")}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-800 rounded-lg text-sm"
-            >
-              Home
-            </button>
-
-          </div>
+        {/* Left Ad Space */}
+        <div className="hidden lg:flex lg:col-span-2 border border-gray-700 rounded-xl items-center justify-center text-gray-500 text-sm">
+          Ad Space
         </div>
 
-        {/* Game iframe */}
-        {game.iframeURL ? (
-          <iframe
-            ref={iframeRef}
-            src={game.iframeURL}
-            title={game.title}
-            allowFullScreen
-            className="w-full h-full border-none"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            No Game Available
+        {/* Game Container */}
+        <div
+          ref={containerRef}
+          className="relative col-span-1 lg:col-span-8 bg-black rounded-xl overflow-hidden border border-gray-800"
+          style={{ height: "80vh" }}
+        >
+
+          {/* Top Overlay */}
+          <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 bg-gradient-to-b from-black/70 to-transparent z-10">
+
+            <h1 className="text-lg md:text-xl font-bold">
+              {game.title}
+            </h1>
+
+            <div className="flex gap-3">
+
+              <button
+                onClick={toggleFullscreen}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm"
+              >
+                {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+              </button>
+
+              <button
+                onClick={() => router.push("/")}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-800 rounded-lg text-sm"
+              >
+                Home
+              </button>
+
+            </div>
           </div>
-        )}
+
+          {/* Game iframe */}
+          {game.iframeURL ? (
+            <iframe
+              ref={iframeRef}
+              src={game.iframeURL}
+              title={game.title}
+              allowFullScreen
+              className="w-full h-full border-none"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              No Game Available
+            </div>
+          )}
+        </div>
+
+        {/* Right Ad Space */}
+        <div className="hidden lg:flex lg:col-span-2 border border-gray-700 rounded-xl items-center justify-center text-gray-500 text-sm">
+          Ad Space
+        </div>
+
       </div>
 
-      {/* Game Description Section */}
+      {/* Game Description */}
       <div className="max-w-6xl mx-auto px-6 py-12">
 
         <h2 className="text-2xl font-bold mb-4">
@@ -122,6 +135,6 @@ export default function GamePage() {
         </p>
 
       </div>
-    </div>
+    </Layout>
   );
 }
