@@ -1,21 +1,17 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState, useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { games } from "@/app/mock";
+import { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import Layout from "@/app/pageLayout/layout";
 
 export default function GamePage() {
-  const params = useParams();
+
   const router = useRouter();
 
-  const gameTitle = decodeURIComponent(params.title);
+  const params = useSearchParams();
+  const game = JSON.parse(params.get("game"));
 
-  // memoized lookup (better performance for large game lists)
-  const game = useMemo(
-    () => games.find((g) => g.title === gameTitle),
-    [gameTitle]
-  );
 
   const containerRef = useRef(null);
   const infoRef = useRef(null);
