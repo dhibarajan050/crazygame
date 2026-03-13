@@ -35,6 +35,7 @@ export default function GameCard({ game }) {
           ease-out
           group-hover:scale-110
           "
+          loading="lazy"
         />
 
         {/* Dark gradient for readability */}

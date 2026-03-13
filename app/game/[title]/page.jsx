@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -119,6 +119,7 @@ export default function GamePage() {
               title={game.title}
               allowFullScreen
               className="w-full h-full border-none"
+              loading="lazy"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
