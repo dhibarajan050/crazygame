@@ -1,16 +1,19 @@
-"use client"
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+"use client";
 
-export default function GameCard({ game }) {
-  const router = useRouter();
+import Image from "next/image";
+import Link from "next/link";
+import { memo } from "react";
+
+function GameCard({ game }) {
+  const href = `/game/${encodeURIComponent(game.title)}`;
 
   return (
-    <div
-      onClick={() => router.push(`/game/${encodeURIComponent(game.title)}`)}
+    <Link
+      href={href}
       className="
       group
       relative
+      block
       rounded-xl
       overflow-hidden
       bg-black
@@ -18,7 +21,6 @@ export default function GameCard({ game }) {
       hover:shadow-xl
       transition
       duration-300
-      cursor-pointer
       "
     >
       {/* Image */}
@@ -28,6 +30,10 @@ export default function GameCard({ game }) {
           src={game.thumb || game.image || "/placeholder.png"}
           alt={game.title}
           fill
+          sizes="(max-width: 640px) 50vw,
+                 (max-width: 1024px) 33vw,
+                 (max-width: 1280px) 25vw,
+                 16vw"
           className="
           object-cover
           transition-transform
@@ -35,10 +41,9 @@ export default function GameCard({ game }) {
           ease-out
           group-hover:scale-110
           "
-          loading="lazy"
         />
 
-        {/* Dark gradient for readability */}
+        {/* Gradient */}
         <div className="
         absolute inset-0
         bg-gradient-to-t
@@ -65,8 +70,7 @@ export default function GameCard({ game }) {
         flex items-center justify-center
         opacity-0
         group-hover:opacity-100
-        transition
-        duration-300
+        transition duration-300
         ">
           <div className="
           bg-white text-black
@@ -105,6 +109,8 @@ export default function GameCard({ game }) {
           {game.tags}
         </div>
       )}
-    </div>
+    </Link>
   );
 }
+
+export default memo(GameCard);
