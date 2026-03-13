@@ -22,13 +22,19 @@ export default function GameCard({ game }) {
       "
     >
       {/* Image */}
-      <div className="relative w-full h-48">
+      <div className="relative w-full h-48 overflow-hidden">
 
         <Image
           src={game.thumb || game.image || "/placeholder.png"}
           alt={game.title}
           fill
-          className="object-cover"
+          className="
+          object-cover
+          transition-transform
+          duration-500
+          ease-out
+          group-hover:scale-110
+          "
         />
 
         {/* Dark gradient for readability */}

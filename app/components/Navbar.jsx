@@ -1,33 +1,106 @@
+"use client"
+
+import { useState } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
-    return (
-        <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-            <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                <div className="text-xl font-bold">Game Portal</div>
-                <ul className="flex space-x-6">
-                    <li>
 
-                        <a className="hover:text-blue-600 transition-colors">Home</a>
+  const [open, setOpen] = useState(false);
 
-                    </li>
-                    <li>
+  return (
+    <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-white/10">
 
-                        <a className="hover:text-blue-600 transition-colors">About Us</a>
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-                    </li>
-                    <li>
+        {/* Logo */}
+        <Link href="/" className="text-2xl font-bold tracking-wide">
+          🎮 GamePortal
+        </Link>
 
-                        <a className="hover:text-blue-600 transition-colors">Policy</a>
+        {/* Desktop Menu */}
+        <ul className="hidden md:flex items-center space-x-8 font-medium">
 
-                    </li>
-                    <li>
+          <li className="group relative">
+            <Link href="/" className="transition">
+              Home
+            </Link>
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
+          </li>
 
-                        <a className="hover:text-blue-600 transition-colors">Contact Us</a>
+          <li className="group relative">
+            <Link href="/about">
+              About
+            </Link>
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
+          </li>
 
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    );
+          <li className="group relative">
+            <Link href="/policy">
+              Policy
+            </Link>
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+          </li>
+
+          <li className="group relative">
+            <Link href="/contact">
+              Contact
+            </Link>
+            <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-green-500 transition-all duration-300 group-hover:w-full"></span>
+          </li>
+
+        </ul>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden flex flex-col space-y-1"
+        >
+          <span className={`w-6 h-[2px] bg-current transition ${open ? "rotate-45 translate-y-2" : ""}`}></span>
+          <span className={`w-6 h-[2px] bg-current transition ${open ? "opacity-0" : ""}`}></span>
+          <span className={`w-6 h-[2px] bg-current transition ${open ? "-rotate-45 -translate-y-2" : ""}`}></span>
+        </button>
+
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`
+        md:hidden
+        overflow-hidden
+        transition-all
+        duration-300
+        ${open ? "max-h-96" : "max-h-0"}
+        `}
+      >
+        <ul className="px-6 pb-6 space-y-4 font-medium">
+
+          <li>
+            <Link href="/" onClick={() => setOpen(false)} className="block hover:text-blue-500 transition">
+              Home
+            </Link>
+          </li>
+
+          <li>
+            <Link href="/about" onClick={() => setOpen(false)} className="block hover:text-purple-500 transition">
+              About Us
+            </Link>
+          </li>
+
+          <li>
+            <Link href="/policy" onClick={() => setOpen(false)} className="block hover:text-cyan-500 transition">
+              Policy
+            </Link>
+          </li>
+
+          <li>
+            <Link href="/contact" onClick={() => setOpen(false)} className="block hover:text-green-500 transition">
+              Contact Us
+            </Link>
+          </li>
+
+        </ul>
+      </div>
+
+    </nav>
+  );
 }
