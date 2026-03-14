@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { games } from "../../mock"; // relative to api folder
+import { games } from "@/app/mock.js"
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -14,3 +14,6 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ data, total, page, limit });
 }
+
+
+
