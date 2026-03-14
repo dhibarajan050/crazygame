@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { slugify } from "@/app/utils/slugify";
+import Link from "next/link";
 
 export default function SearchBar() {
     const [query, setQuery] = useState("");
@@ -159,7 +161,7 @@ export default function SearchBar() {
                     <div className="max-h-90 overflow-y-auto">
 
                         {results.map((game) => (
-                            <div
+                            <Link href={`/game/${slugify(game.title)}`}
                                 key={game.id}
                                 className="
                   flex
@@ -195,7 +197,7 @@ export default function SearchBar() {
                                     {game.title}
                                 </span>
 
-                            </div>
+                            </Link>
                         ))}
 
                     </div>
