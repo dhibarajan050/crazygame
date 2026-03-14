@@ -1,13 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Layout from "@/app/pageLayout/layout";
 
-export default function GamePage() {
+export default function GameClient({ game }) {
   const router = useRouter();
-  const params = useSearchParams();
-  const game = JSON.parse(params.get("game"));
 
   const containerRef = useRef(null);
   const infoRef = useRef(null);
@@ -16,7 +14,6 @@ export default function GamePage() {
   const [startGame, setStartGame] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
 
-  // Fullscreen listener
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -28,7 +25,6 @@ export default function GamePage() {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
-  // Lazy load Game Info section
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -45,30 +41,17 @@ export default function GamePage() {
     return () => observer.disconnect();
   }, []);
 
-  if (!game) {
-    return (
-      <div className="h-screen flex items-center justify-center text-white bg-black">
-        Game not found
-      </div>
-    );
-  }
-
   const toggleFullscreen = async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await containerRef.current?.requestFullscreen();
-      } else {
-        await document.exitFullscreen();
-      }
-    } catch (error) {
-      console.error("Fullscreen error:", error);
+    if (!document.fullscreenElement) {
+      await containerRef.current?.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
     }
   };
 
   return (
     <Layout>
-      {/* Background Glow */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-900/20 via-black to-purple-900/20 blur-3xl"></div>
+       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-900/20 via-black to-purple-900/20 blur-3xl"></div>
 
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-6">
 

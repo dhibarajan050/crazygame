@@ -1,24 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
-import { useRouter } from "next/navigation";
+import { slugify } from "@/app/utils/slugify";
 
 function GameCard({ game }) {
-  const router = useRouter();
-
-  const handleNavigate = () => {
-    const gameData = encodeURIComponent(JSON.stringify(game));
-
-    router.push(
-      `/game/${encodeURIComponent(game.title)}?game=${gameData}`
-    );
-  };
+  const gameSlug = slugify(game.title);
 
   return (
-    <div
-      onClick={handleNavigate}
-      className="
+    <Link href={`/game/${gameSlug}`}>
+      <div className="
       group
       relative
       block
@@ -31,7 +23,7 @@ function GameCard({ game }) {
       duration-300
       cursor-pointer
       "
-    >
+      >
       {/* Image */}
       <div className="relative w-full h-48 overflow-hidden">
         <Image
@@ -74,13 +66,14 @@ function GameCard({ game }) {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      {game.tags && (
-        <div className="px-3 py-2 bg-gray-900 text-gray-300 text-xs truncate">
-          {game.tags}
-        </div>
-      )}
-    </div>
+        {/* Bottom bar */}
+        {game.tags && (
+          <div className="px-3 py-2 bg-gray-900 text-gray-300 text-xs truncate">
+            {game.tags}
+          </div>
+        )}
+      </div>
+    </Link>
   );
 }
 
