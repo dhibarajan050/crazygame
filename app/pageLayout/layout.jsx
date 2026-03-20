@@ -1,18 +1,20 @@
-import React from 'react'
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 
 export default function Layout({ children }) {
   return (
-    <div className='bg-gray-200'>
+    <div className="bg-gray-200 min-h-screen flex flex-col">
       <Navbar />
-      <div className="pt-20 container box-border mx-auto px-10 py-10">
 
-        {children}
+      <main className="flex-1 pt-20">
+        <div className="container mx-auto box-border 
+                        px-4 sm:px-5 md:px-8 lg:px-12 xl:px-16 
+                        py-4 sm:py-5 md:py-6 lg:py-8">
+          {children}
+        </div>
+      </main>
 
-      </div>
       <Footer />
     </div>
-
-  )
+  );
 }

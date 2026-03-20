@@ -6,6 +6,7 @@ import { memo } from "react";
 import { slugify } from "@/app/utils/slugify";
 
 function GameCard({ game }) {
+  console.log("game",game)
   const gameSlug = slugify(game.title);
 
   return (
@@ -26,10 +27,10 @@ function GameCard({ game }) {
       >
       {/* Image */}
       <div className="relative w-full h-48 overflow-hidden">
-        <Image
-          src={game.thumb || game.image || "/placeholder.png"}
+        <img
+          src={game?.thumb || "https://blocks.astratic.com/img/general-img-landscape.png"}
           alt={game.title}
-          fill
+          fill="true"
           sizes="(max-width: 640px) 50vw,
                  (max-width: 1024px) 33vw,
                  (max-width: 1280px) 25vw,

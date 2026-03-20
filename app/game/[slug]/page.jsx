@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
   }
 
   const description =
-    game.description.replace(/<[^>]*>/g, "").substring(0, 160) + "...";
+    game.description?.replace(/<[^>]*>/g, "").substring(0, 160) + "..." || "";
 
   return {
     title: `Play ${game.title} Online Free - ${game.category} Game`,
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
     keywords: [
       game.title,
       game.category,
-      ...game.tags.split(",").map((t) => t.trim()),
+      ...game?.tags.split(",").map((t) => t.trim()),
     ],
     openGraph: {
       title: `Play ${game.title} Online Free`,
