@@ -71,7 +71,7 @@ export default function SearchBar() {
     };
 
     return (
-        <div ref={wrapperRef} className="relative w-full max-w-lg mx-auto">
+        <div ref={wrapperRef} className="relative w-full max-w-lg mx-auto mb-8">
 
             {/* Search Input */}
             <div className="relative">

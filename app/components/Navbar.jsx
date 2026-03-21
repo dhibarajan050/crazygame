@@ -35,7 +35,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold tracking-wide">
-          🎮 GamePortal
+          🎮 PlayArenaHub
         </Link>
 
         {/* Desktop Menu */}

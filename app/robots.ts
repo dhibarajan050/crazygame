@@ -1,5 +1,8 @@
 import { MetadataRoute } from "next";
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://playarenahub.com").replace(/\/$/, "");
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -7,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/api/",
     },
-    sitemap: "https://yourdomain.com/sitemap.xml",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

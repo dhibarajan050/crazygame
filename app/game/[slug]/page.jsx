@@ -2,6 +2,9 @@ import { games } from "@/app/mock";
 import { slugify } from "@/app/utils/slugify";
 import GameClient from "./GameClient";
 
+const SITE_URL =
+  (process.env.NEXT_PUBLIC_SITE_URL ?? "https://playarenahub.com").replace(/\/$/, "");
+
 function getGameBySlug(slug) {
   return games.find((game) => slugify(game.title) === slug);
 }
@@ -23,22 +26,31 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const plainDescription = game.description?.replace(/<[^>]*>/g, "").trim() || "";
   const description =
-    game.description?.replace(/<[^>]*>/g, "").substring(0, 160) + "..." || "";
+    plainDescription.length > 160
+      ? `${plainDescription.substring(0, 157)}...`
+      : plainDescription;
+  const canonicalUrl = `${SITE_URL}/game/${slug}`;
+  const gameTags =
+    game?.tags
+      ?.split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean) ?? [];
 
   return {
     title: `Play ${game.title} Online Free - ${game.category} Game`,
     description,
-    keywords: [
-      game.title,
-      game.category,
-      ...game?.tags.split(",").map((t) => t.trim()),
-    ],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    keywords: [game.title, game.category, ...gameTags],
     openGraph: {
       title: `Play ${game.title} Online Free`,
       description,
       type: "website",
-      url: `https://yourdomain.com/game/${slug}`,
+      url: canonicalUrl,
+      siteName: "PlayArenaHub",
       images: [
         {
           url: game.thumb,
@@ -47,6 +59,12 @@ export async function generateMetadata({ params }) {
           alt: game.title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Play ${game.title} Online Free`,
+      description,
+      images: [game.thumb],
     },
   };
 }
