@@ -25,7 +25,7 @@ export default function PolicyPage() {
               1. Information We Collect
             </h2>
             <p>
-              Game Portal does not actively collect personal information from
+              PlayArenaHub does not actively collect personal information from
               users unless it is voluntarily provided through contact forms
               or email communication. Most games on our platform can be
               played without creating an account or submitting personal data.
@@ -51,10 +51,20 @@ export default function PolicyPage() {
               3. Third-Party Content
             </h2>
             <p>
-              Some games available on Game Portal may be provided by third-party
-              developers or gaming platforms and embedded using iframe
-              technology. These third parties may have their own privacy
-              policies and data practices which are outside our control.
+              Games available on PlayArenaHub are officially embedded from
+              <a
+                href="https://gamemonetize.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-1 underline"
+              >
+                GameMonetize
+              </a>
+              and may include content from third-party developers. We do not
+              own these games; we only distribute and showcase them on our
+              platform via embedded iframe technology. Third-party providers may
+              have their own privacy policies and data practices, which are
+              outside our control.
             </p>
           </section>
 

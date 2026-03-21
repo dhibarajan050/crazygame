@@ -18,7 +18,7 @@ export default function ContactPage() {
               href="mailto:support@gameportal.example.com"
               className="text-blue-600 underline hover:text-blue-700 transition"
             >
-              support@gameportal.example.com
+              360digitalproducts.official@gmail.com
             </a>
             , or use the form below to get in touch.
           </p>
