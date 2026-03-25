@@ -55,7 +55,7 @@ export default function Footer() {
           </div>
 
           {/* Social */}
-          <div>
+          {/* <div>
             <h3 className="font-semibold mb-4 text-white">Connect</h3>
 
             <div className="flex space-x-4">
@@ -107,7 +107,7 @@ export default function Footer() {
 
             </div>
 
-          </div>
+          </div> */}
 
         </div>
 
