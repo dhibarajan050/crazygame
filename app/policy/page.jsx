@@ -87,8 +87,16 @@ export default function PolicyPage() {
             </h2>
             <p>
               If you have any questions about this Privacy Policy or wish to
-              request removal of any information you have shared with us,
-              please contact us through the contact page on our website.
+              request the removal of any information you have shared with us,
+              please contact us through the contact page on our website or
+              reach out to us directly via email at
+              <a
+                href="mailto:360digitalproducts.official@gmail.com"
+                className="ml-1 text-blue-600 underline hover:text-blue-700"
+              >
+                360digitalproducts.official@gmail.com
+              </a>
+              .
             </p>
           </section>
 

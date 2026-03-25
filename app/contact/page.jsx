@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "@/app/pageLayout/layout";
 
 export default function ContactPage() {
@@ -10,7 +10,27 @@ export default function ContactPage() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState({ type: "", text: "" });
+  const [toast, setToast] = useState({
+    show: false,
+    type: "success",
+    text: "",
+  });
+
+  useEffect(() => {
+    if (!toast.show) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3200);
+
+    return () => clearTimeout(timer);
+  }, [toast.show, toast.text]);
+
+  const showToast = (type, text) => {
+    setToast({ show: true, type, text });
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,10 +39,9 @@ export default function ContactPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setFeedback({ type: "", text: "" });
 
     if (!formData.name || !formData.email || !formData.message) {
-      setFeedback({ type: "error", text: "All fields are required." });
+      showToast("error", "All fields are required.");
       return;
     }
 
@@ -40,16 +59,13 @@ export default function ContactPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result?.error || "Failed to send message.");
+        throw new Error(result?.details || result?.error || "Failed to send message.");
       }
 
-      setFeedback({ type: "success", text: "Message sent successfully." });
+      showToast("success", "Message sent successfully.");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      setFeedback({
-        type: "error",
-        text: error?.message || "Something went wrong. Please try again.",
-      });
+      showToast("error", error?.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -57,6 +73,23 @@ export default function ContactPage() {
 
   return (
     <Layout>
+      <div
+        aria-live="polite"
+        className={`fixed top-24 right-4 z-[60] w-[calc(100%-2rem)] max-w-sm transition-all duration-300 ${
+          toast.show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        <div
+          className={`rounded-lg border px-4 py-3 shadow-lg bg-white ${
+            toast.type === "success"
+              ? "border-green-300 text-green-800"
+              : "border-red-300 text-red-800"
+          }`}
+        >
+          {toast.text}
+        </div>
+      </div>
+
       <div className="max-w-4xl mx-auto px-6 py-16">
 
         {/* Header */}
@@ -137,16 +170,6 @@ export default function ContactPage() {
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-transparent outline-none resize-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
               />
             </div>
-
-            {feedback.text ? (
-              <p
-                className={`text-sm ${
-                  feedback.type === "success" ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {feedback.text}
-              </p>
-            ) : null}
 
             {/* Button */}
             <div className="pt-2">

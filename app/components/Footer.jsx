@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h2 className="text-2xl font-bold mb-3 text-white">
-              🎮 Game Portal
+              🎮 PlayArenaHub
             </h2>
 
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -63,22 +63,46 @@ export default function Footer() {
               <a
                 href="#"
                 className="p-2 rounded-lg border border-gray-600 hover:border-blue-500 hover:text-blue-400 transition"
+                aria-label="Instagram"
               >
-                🌐
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5a4.25 4.25 0 0 0 4.25 4.25h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5a4.25 4.25 0 0 0-4.25-4.25h-8.5ZM17.5 6.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
+                </svg>
               </a>
 
               <a
                 href="#"
                 className="p-2 rounded-lg border border-gray-600 hover:border-blue-500 hover:text-blue-400 transition"
+                aria-label="Twitter"
               >
-                🐦
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.637 7.584H.476l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.933Zm-1.29 19.494h2.04L6.486 3.24H4.297L17.61 20.647Z" />
+                </svg>
               </a>
 
               <a
                 href="#"
                 className="p-2 rounded-lg border border-gray-600 hover:border-blue-500 hover:text-blue-400 transition"
+                aria-label="YouTube"
               >
-                📺
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path d="M21.582 6.186a2.997 2.997 0 0 0-2.11-2.12C17.64 3.5 12 3.5 12 3.5s-5.64 0-7.472.566a2.997 2.997 0 0 0-2.11 2.12C1.85 8.03 1.85 12 1.85 12s0 3.97.568 5.814a2.997 2.997 0 0 0 2.11 2.12C6.36 20.5 12 20.5 12 20.5s5.64 0 7.472-.566a2.997 2.997 0 0 0 2.11-2.12C22.15 15.97 22.15 12 22.15 12s0-3.97-.568-5.814ZM10.2 15.2V8.8l5.6 3.2-5.6 3.2Z" />
+                </svg>
               </a>
 
             </div>
@@ -90,7 +114,7 @@ export default function Footer() {
         {/* Divider */}
         <div className="mt-10 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
 
-          <p>© {new Date().getFullYear()} Game Portal. All rights reserved.</p>
+          <p> {new Date().getFullYear()} | Designed and developed by PlayArenaHub.me.</p>
 
           <p className="mt-3 md:mt-0">
             Made with ❤️ for gamers
