@@ -5,6 +5,73 @@ import { useRouter } from "next/navigation";
 import Layout from "@/app/pageLayout/layout";
 
 export default function GameClient({ game }) {
+  // JSON-LD Structured Data for SEO
+  useEffect(() => {
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      name: game.title,
+      description: game.description?.replace(/<[^>]*>/g, "").trim(),
+      image: game.thumb,
+      url: typeof window !== "undefined" ? window.location.href : "",
+      gameCategory: game.category,
+      keywords: Array.isArray(game.tags) 
+        ? game.tags 
+        : game.tags?.split(",").map((tag) => tag.trim()),
+      applicationCategory: "Game",
+      inLanguage: "en-US",
+      author: {
+        "@type": "Organization",
+        name: "PlayArenaHub",
+      },
+    };
+
+    // Add breadcrumb structured data
+    const breadcrumbData = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: typeof window !== "undefined" 
+            ? `${window.location.origin}/` 
+            : "https://playarenahub.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: game.category,
+          item: typeof window !== "undefined" 
+            ? `${window.location.origin}/` 
+            : "https://playarenahub.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: game.title,
+          item: typeof window !== "undefined" ? window.location.href : "",
+        },
+      ],
+    };
+
+    // Create and append structured data scripts
+    const script1 = document.createElement("script");
+    script1.type = "application/ld+json";
+    script1.textContent = JSON.stringify(structuredData);
+    document.head.appendChild(script1);
+
+    const script2 = document.createElement("script");
+    script2.type = "application/ld+json";
+    script2.textContent = JSON.stringify(breadcrumbData);
+    document.head.appendChild(script2);
+
+    return () => {
+      if (script1.parentNode) script1.parentNode.removeChild(script1);
+      if (script2.parentNode) script2.parentNode.removeChild(script2);
+    };
+  }, [game]);
   const router = useRouter();
 
   const containerRef = useRef(null);

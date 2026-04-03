@@ -44,19 +44,37 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: canonicalUrl,
     },
-    keywords: [game.title, game.category, ...gameTags],
+    keywords: [
+      game.title,
+      `${game.title} online`,
+      `play ${game.title}`,
+      game.category,
+      `free ${game.category} game`,
+      "play game online",
+      "free online games",
+      ...gameTags,
+    ].filter(Boolean),
+    robots: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
     openGraph: {
       title: `Play ${game.title} Online Free`,
       description,
       type: "website",
       url: canonicalUrl,
       siteName: "PlayArenaHub",
+      locale: "en_US",
       images: [
         {
           url: game.thumb,
           width: 512,
           height: 384,
           alt: game.title,
+          type: "image/jpeg",
         },
       ],
     },
@@ -65,6 +83,7 @@ export async function generateMetadata({ params }) {
       title: `Play ${game.title} Online Free`,
       description,
       images: [game.thumb],
+      creator: "@PlayArenaHub",
     },
   };
 }

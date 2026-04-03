@@ -27,6 +27,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  robots: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
     url: SITE_URL,
@@ -34,6 +48,7 @@ export const metadata: Metadata = {
     title: "PlayArenaHub - Play Free Online Games",
     description:
       "PlayArenaHub lets you instantly play free online browser games across action, puzzle, racing, and more.",
+    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
