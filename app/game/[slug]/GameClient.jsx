@@ -3,75 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/app/pageLayout/layout";
+import { getGameId } from "@/app/utils/constant";
 
 export default function GameClient({ game }) {
-  // JSON-LD Structured Data for SEO
-  useEffect(() => {
-    const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "VideoGame",
-      name: game.title,
-      description: game.description?.replace(/<[^>]*>/g, "").trim(),
-      image: game.thumb,
-      url: typeof window !== "undefined" ? window.location.href : "",
-      gameCategory: game.category,
-      keywords: Array.isArray(game.tags) 
-        ? game.tags 
-        : game.tags?.split(",").map((tag) => tag.trim()),
-      applicationCategory: "Game",
-      inLanguage: "en-US",
-      author: {
-        "@type": "Organization",
-        name: "PlayArenaHub",
-      },
-    };
-
-    // Add breadcrumb structured data
-    const breadcrumbData = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: typeof window !== "undefined" 
-            ? `${window.location.origin}/` 
-            : "https://playarenahub.com/",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: game.category,
-          item: typeof window !== "undefined" 
-            ? `${window.location.origin}/` 
-            : "https://playarenahub.com/",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: game.title,
-          item: typeof window !== "undefined" ? window.location.href : "",
-        },
-      ],
-    };
-
-    // Create and append structured data scripts
-    const script1 = document.createElement("script");
-    script1.type = "application/ld+json";
-    script1.textContent = JSON.stringify(structuredData);
-    document.head.appendChild(script1);
-
-    const script2 = document.createElement("script");
-    script2.type = "application/ld+json";
-    script2.textContent = JSON.stringify(breadcrumbData);
-    document.head.appendChild(script2);
-
-    return () => {
-      if (script1.parentNode) script1.parentNode.removeChild(script1);
-      if (script2.parentNode) script2.parentNode.removeChild(script2);
-    };
-  }, [game]);
   const router = useRouter();
 
   const containerRef = useRef(null);
@@ -81,17 +15,47 @@ export default function GameClient({ game }) {
   const [startGame, setStartGame] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
 
+  // ✅ SEO Structured Data
+  useEffect(() => {
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      name: game.title,
+      description: game.description?.replace(/<[^>]*>/g, "").trim(),
+      image: game.thumb,
+      url: typeof window !== "undefined" ? window.location.href : "",
+      gameCategory: game.category,
+      keywords: Array.isArray(game.tags)
+        ? game.tags
+        : game.tags?.split(",").map((tag) => tag.trim()),
+      applicationCategory: "Game",
+      inLanguage: "en-US",
+      author: {
+        "@type": "Organization",
+        name: "PlayArenaHub",
+      },
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+
+    return () => script.remove();
+  }, [game]);
+
+  // ✅ Fullscreen listener
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
+  // ✅ Lazy load info section
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -104,10 +68,78 @@ export default function GameClient({ game }) {
     );
 
     if (infoRef.current) observer.observe(infoRef.current);
-
     return () => observer.disconnect();
   }, []);
 
+  // ✅ Walkthrough Video Loader (FIXED)
+  useEffect(() => {
+    if (!showInfo) return;
+
+    window.VIDEO_OPTIONS = {
+      gameid: getGameId(game.url),
+      width: "100%",
+      height: "480px",
+      color: "#3f007e",
+      getads: "false",
+    };
+
+    let cancelled = false;
+    let gmScript = null;
+
+    const loadScript = (id, src, parent) =>
+      new Promise((resolve, reject) => {
+        const existing = document.getElementById(id);
+        if (existing) {
+          resolve(existing);
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.id = id;
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve(script);
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        parent.appendChild(script);
+      });
+
+    const target = document.getElementById("gamemonetize-video");
+    if (!target) return;
+
+    const loadVideoScript = async () => {
+      try {
+        if (!window.jQuery && !window.$) {
+          await loadScript(
+            "jquery-cdn",
+            "https://code.jquery.com/jquery-3.7.1.min.js",
+            document.head
+          );
+        }
+
+        if (cancelled) return;
+
+        target.innerHTML = "";
+        gmScript = document.createElement("script");
+        gmScript.id = "gamemonetize-video-api";
+        gmScript.src = "https://api.gamemonetize.com/video.js";
+        gmScript.async = true;
+        target.appendChild(gmScript);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadVideoScript();
+
+    return () => {
+      cancelled = true;
+      if (gmScript && gmScript.parentNode) {
+        gmScript.parentNode.removeChild(gmScript);
+      }
+    };
+  }, [showInfo, game.url]);
+
+  // ✅ Fullscreen toggle
   const toggleFullscreen = async () => {
     if (!document.fullscreenElement) {
       await containerRef.current?.requestFullscreen();
@@ -118,7 +150,7 @@ export default function GameClient({ game }) {
 
   return (
     <Layout>
-       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-900/20 via-black to-purple-900/20 blur-3xl"></div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-indigo-900/20 via-black to-purple-900/20 blur-3xl"></div>
 
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-6">
 
@@ -191,7 +223,6 @@ export default function GameClient({ game }) {
                     d="M3 11l9-7 9 7M5 10v10h14V10"/>
                 </svg>
               </button>
-
             </div>
           </div>
 
@@ -221,36 +252,41 @@ export default function GameClient({ game }) {
         </div>
 
         {/* Right Ad */}
-        <div className="hidden lg:flex lg:col-span-2 items-center justify-center rounded-xl border border-white/10 backdrop-blur bg-white/5 text-gray-400">
+        <div className="hidden lg:flex lg:col-span-2 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-400">
           Ad Space
         </div>
       </div>
 
-      {/* Lazy Game Info Section */}
+      {/* ✅ GAME INFO + WALKTHROUGH */}
       <div ref={infoRef} className="max-w-6xl mx-auto px-6 pb-16">
-
         {showInfo && (
-          <div className="rounded-2xl p-8 bg-white border border-gray-200 shadow-lg hover:shadow-xl transition duration-300">
+          <div className="rounded-2xl p-8 bg-white shadow-lg">
 
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+            <h2 className="text-2xl font-bold mb-4">
               About {game.title}
             </h2>
 
-            <p className="text-gray-700 leading-relaxed text-sm md:text-base mb-6">
-              {game.description}
-            </p>
+            <p className="mb-6">{game.description}</p>
 
             {game.instructions && (
-              <div>
-                <h3 className="text-lg md:text-xl font-semibold mb-3 text-gray-900">
+              <>
+                <h3 className="text-xl font-semibold mb-2">
                   Instructions
                 </h3>
-
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                <p className="mb-6 whitespace-pre-wrap">
                   {game.instructions}
                 </p>
-              </div>
+              </>
             )}
+
+            {/* ✅ WALKTHROUGH VIDEO */}
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold mb-4">
+                🎥 Walkthrough Video
+              </h3>
+
+              <div id="gamemonetize-video"></div>
+            </div>
 
           </div>
         )}

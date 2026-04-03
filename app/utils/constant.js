@@ -25,3 +25,7 @@
 
     return pages;
   };
+
+  export function getGameId(url) {
+  return url.split('/')[3];
+}
